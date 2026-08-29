@@ -4,8 +4,10 @@ from __future__ import annotations
 import sys
 
 from blush.app import BlushApp
+from blush.core import stretches, tracker
 from blush.engine import ReminderEngine
 from blush.ui.main_window import MainWindow
+from blush.ui.reminder_popup import ReminderPopup
 from blush.ui.settings_window import SettingsWindow
 from blush.ui.tray import TrayIcon
 
@@ -13,8 +15,6 @@ from blush.ui.tray import TrayIcon
 def main() -> int:
     app = BlushApp(sys.argv)
     engine = ReminderEngine()
-    main_win = MainWindow(engine)
-    settings_win = SettingsWindow(engine)
 
     def open_main():
         main_win.show()
@@ -26,13 +26,23 @@ def main() -> int:
         settings_win.raise_()
         settings_win.activateWindow()
 
-    tray = TrayIcon(engine, open_main, open_settings)
+    def on_drink():
+        tracker.record_drink()
+        main_win.refresh_water()
+        engine.poke("water")
+
+    def show_stretch():
+        r = stretches.random_routine()
+        ReminderPopup("stretch time~", stretches.format_routine(r)).exec()
 
     def notify(message: str):
         tray.showMessage("blush", message, tray.icon(), 4000)
 
+    main_win = MainWindow(engine, drink_callback=on_drink)
+    settings_win = SettingsWindow(engine)
+    tray = TrayIcon(engine, open_main, open_settings)
+    engine.stretch_due.connect(show_stretch)
     engine.water_due.connect(lambda: notify("time for a sip of water uwu"))
-    engine.stretch_due.connect(lambda: notify("stretch your body for a moment~"))
     engine.affirmation_due.connect(notify)
 
     return app.exec()

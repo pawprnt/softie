@@ -7,15 +7,16 @@ from PySide6.QtWidgets import (
 )
 
 from blush import theme
-from blush.core import affirmations
+from blush.core import affirmations, tracker
 
 
 class MainWindow(QWidget):
-    def __init__(self, engine=None, parent: QWidget | None = None):
+    def __init__(self, engine=None, drink_callback=None, parent: QWidget | None = None):
         super().__init__(parent)
         self.engine = engine
+        self._drink_callback = drink_callback
         self.setWindowTitle("blush")
-        self.setMinimumSize(360, 320)
+        self.setMinimumSize(360, 340)
         self.setStyleSheet(theme.PALETTE_QSS)
 
         lay = QVBoxLayout(self)
@@ -23,6 +24,12 @@ class MainWindow(QWidget):
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet(f"font-size: 28px; font-weight: 700; color: {theme.C.ACCENT};")
         lay.addWidget(title)
+
+        self.water_label = QLabel()
+        self.water_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.water_label.setStyleSheet(f"font-size: 14px; color: {theme.C.ACCENT_2};")
+        lay.addWidget(self.water_label)
+        self.refresh_water()
 
         self.affirm = QLabel(affirmations.random_affirmation())
         self.affirm.setWordWrap(True)
@@ -41,9 +48,19 @@ class MainWindow(QWidget):
         lay.addLayout(row)
         lay.addStretch(1)
 
+    def refresh_water(self):
+        log = tracker.load_log()
+        self.water_label.setText(
+            f"water: {log['count']} today  ·  {log['streak']} day streak"
+        )
+
     def _water(self):
-        if self.engine:
-            self.engine.poke("water")
+        if self._drink_callback:
+            self._drink_callback()
+        else:
+            if self.engine:
+                self.engine.poke("water")
+        self.refresh_water()
         self.affirm.setText(affirmations.random_affirmation())
 
     def _stretch(self):

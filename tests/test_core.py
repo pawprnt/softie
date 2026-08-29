@@ -1,6 +1,6 @@
 import pytest
 
-from blush.core import config, affirmations
+from blush.core import config, affirmations, tracker, stretches
 from blush.engine import ReminderEngine
 from blush.ui.tray import make_icon
 
@@ -52,3 +52,21 @@ def test_engine_reload_disables(app):
 
 def test_icon(app):
     assert not make_icon().isNull()
+
+
+def test_water_log(tmp_path, monkeypatch):
+    monkeypatch.setattr(tracker, "LOG_FILE", tmp_path / "water.json")
+    monkeypatch.setattr(tracker, "LOG_DIR", tmp_path)
+    log = tracker.record_drink()
+    assert log["count"] == 1
+    assert log["streak"] == 0
+    log = tracker.record_drink()
+    assert log["count"] == 2
+    reloaded = tracker.load_log()
+    assert reloaded["count"] == 2
+
+
+def test_stretches():
+    assert isinstance(stretches.random_routine(), dict)
+    body = stretches.format_routine(stretches.ROUTINES[0])
+    assert "neck rolls" in body and "- " in body
