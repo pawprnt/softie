@@ -5,7 +5,7 @@ import datetime
 import json
 from pathlib import Path
 
-LOG_DIR = Path.home() / ".config" / "blush"
+LOG_DIR = Path.home() / ".config" / "softie"
 LOG_FILE = LOG_DIR / "water.json"
 
 

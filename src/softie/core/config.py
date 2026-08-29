@@ -1,10 +1,10 @@
-"""Settings persistence for blush (~/.config/blush/settings.json)."""
+"""Settings persistence for softie (~/.config/softie/settings.json)."""
 from __future__ import annotations
 
 import json
 from pathlib import Path
 
-CONFIG_DIR = Path.home() / ".config" / "blush"
+CONFIG_DIR = Path.home() / ".config" / "softie"
 CONFIG_FILE = CONFIG_DIR / "settings.json"
 
 DEFAULTS: dict = {

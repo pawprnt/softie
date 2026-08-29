@@ -1,4 +1,4 @@
-"""Pastel / kawaii palette for blush (femboy-adjacent soft plum + pink/lavender)."""
+"""Pastel / kawaii palette for softie (femboy-adjacent soft plum + pink/lavender)."""
 from __future__ import annotations
 
 from PySide6.QtGui import QColor

@@ -4,13 +4,13 @@ from __future__ import annotations
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QVBoxLayout
 
-from blush import theme
+from softie import theme
 
 
 class ReminderPopup(QDialog):
     def __init__(self, title: str, body: str, parent: QWidget | None = None, timeout: int = 25000):
         super().__init__(parent)
-        self.setWindowTitle("blush")
+        self.setWindowTitle("softie")
         self.setMinimumWidth(320)
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.setStyleSheet(theme.PALETTE_QSS)

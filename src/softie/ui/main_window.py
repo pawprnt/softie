@@ -6,8 +6,8 @@ from PySide6.QtWidgets import (
     QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget,
 )
 
-from blush import theme
-from blush.core import affirmations, tracker
+from softie import theme
+from softie.core import affirmations, tracker
 
 
 class MainWindow(QWidget):
@@ -15,12 +15,12 @@ class MainWindow(QWidget):
         super().__init__(parent)
         self.engine = engine
         self._drink_callback = drink_callback
-        self.setWindowTitle("blush")
+        self.setWindowTitle("softie")
         self.setMinimumSize(360, 340)
         self.setStyleSheet(theme.PALETTE_QSS)
 
         lay = QVBoxLayout(self)
-        title = QLabel("blush")
+        title = QLabel("softie")
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet(f"font-size: 28px; font-weight: 700; color: {theme.C.ACCENT};")
         lay.addWidget(title)

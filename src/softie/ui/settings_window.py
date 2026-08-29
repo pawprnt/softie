@@ -6,15 +6,15 @@ from PySide6.QtWidgets import (
     QTextEdit, QVBoxLayout,
 )
 
-from blush import theme
-from blush.core import config
+from softie import theme
+from softie.core import config
 
 
 class SettingsWindow(QDialog):
     def __init__(self, engine, parent: QWidget | None = None):
         super().__init__(parent)
         self.engine = engine
-        self.setWindowTitle("blush · settings")
+        self.setWindowTitle("softie · settings")
         self.setMinimumWidth(360)
         self.setStyleSheet(theme.PALETTE_QSS)
 

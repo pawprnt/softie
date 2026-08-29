@@ -1,8 +1,8 @@
 import pytest
 
-from blush.core import config, affirmations, tracker, stretches
-from blush.engine import ReminderEngine
-from blush.ui.tray import make_icon
+from softie.core import config, affirmations, tracker, stretches
+from softie.engine import ReminderEngine
+from softie.ui.tray import make_icon
 
 
 def test_config_roundtrip(tmp_path, monkeypatch):

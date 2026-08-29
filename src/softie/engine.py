@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from PySide6.QtCore import QObject, QTimer, Signal
 
-from blush.core import config, affirmations
+from softie.core import config, affirmations
 
 _NAMES = ("water", "stretch", "affirmation")
 

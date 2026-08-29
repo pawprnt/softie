@@ -1,11 +1,11 @@
-"""System tray icon + menu for blush."""
+"""System tray icon + menu for softie."""
 from __future__ import annotations
 
 from PySide6.QtCore import Qt, QObject
 from PySide6.QtGui import QColor, QIcon, QPainter, QPixmap
 from PySide6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 
-from blush import theme
+from softie import theme
 
 
 def make_icon(size: int = 64) -> QIcon:
@@ -25,7 +25,7 @@ def make_icon(size: int = 64) -> QIcon:
 class TrayIcon(QSystemTrayIcon):
     def __init__(self, engine, open_main, open_settings, parent: QObject | None = None):
         super().__init__(make_icon(), parent)
-        self.setToolTip("blush")
+        self.setToolTip("softie")
         self.engine = engine
 
         menu = QMenu()

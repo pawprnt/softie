@@ -3,11 +3,11 @@ from __future__ import annotations
 
 from PySide6.QtWidgets import QApplication
 
-from blush import theme
+from softie import theme
 
 
 class BlushApp(QApplication):
     def __init__(self, argv: list[str]):
         super().__init__(argv)
-        self.setApplicationName("blush")
+        self.setApplicationName("softie")
         self.setStyleSheet(theme.PALETTE_QSS)

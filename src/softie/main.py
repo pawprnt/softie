@@ -3,13 +3,13 @@ from __future__ import annotations
 
 import sys
 
-from blush.app import BlushApp
-from blush.core import stretches, tracker
-from blush.engine import ReminderEngine
-from blush.ui.main_window import MainWindow
-from blush.ui.reminder_popup import ReminderPopup
-from blush.ui.settings_window import SettingsWindow
-from blush.ui.tray import TrayIcon
+from softie.app import BlushApp
+from softie.core import stretches, tracker
+from softie.engine import ReminderEngine
+from softie.ui.main_window import MainWindow
+from softie.ui.reminder_popup import ReminderPopup
+from softie.ui.settings_window import SettingsWindow
+from softie.ui.tray import TrayIcon
 
 
 def main() -> int:
@@ -36,7 +36,7 @@ def main() -> int:
         ReminderPopup("stretch time~", stretches.format_routine(r)).exec()
 
     def notify(message: str):
-        tray.showMessage("blush", message, tray.icon(), 4000)
+        tray.showMessage("softie", message, tray.icon(), 4000)
 
     main_win = MainWindow(engine, drink_callback=on_drink)
     settings_win = SettingsWindow(engine)
