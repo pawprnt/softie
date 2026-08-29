@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=softie
+Comment=Kawaii self-care desktop companion
+Exec=softie
+Terminal=false
+Type=Application
+Categories=Utility;Qt;
