@@ -1,7 +1,8 @@
 import pytest
 
-from softie.core import config, affirmations, tracker, stretches
+from softie.core import config, affirmations, tracker, stretches, checklist, focus
 from softie.engine import ReminderEngine
+from softie.theme import THEME, stylesheet
 from softie.ui.tray import make_icon
 
 
@@ -70,3 +71,81 @@ def test_stretches():
     assert isinstance(stretches.random_routine(), dict)
     body = stretches.format_routine(stretches.ROUTINES[0])
     assert "neck rolls" in body and "- " in body
+
+
+def test_config_defaults(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "CONFIG_DIR", tmp_path)
+    monkeypatch.setattr(config, "CONFIG_FILE", tmp_path / "s.json")
+    cfg = config.load()
+    assert cfg["theme"] == "dark"
+    assert cfg["sound"]["enabled"] is True
+    assert cfg["focus"]["focus_min"] == 25
+    assert cfg["checklist"]
+
+
+def test_breathing(app):
+    from softie.ui.breathing_window import BreathingWindow
+
+    w = BreathingWindow()
+    w._idx = 0  # breathe in (expand)
+    w._elapsed = 2000
+    r0 = w._radius
+    w._tick()
+    assert w._radius > r0, "should expand on breathe in"
+
+    w._idx = 2  # breathe out (contract)
+    w._elapsed = 2000
+    r1 = w._radius
+    w._tick()
+    assert w._radius < r1, "should contract on breathe out"
+    w.close()
+
+
+def test_theme_variant():
+    THEME.set_variant("light")
+    assert THEME.name() == "light"
+    assert THEME.C.BG != "#241f2e"
+    ss = stylesheet()
+    assert THEME.C.BG in ss
+    THEME.set_variant("dark")
+    assert THEME.name() == "dark"
+
+
+def test_checklist(tmp_path, monkeypatch):
+    monkeypatch.setattr(config, "CONFIG_FILE", tmp_path / "s.json")
+    monkeypatch.setattr(config, "CONFIG_DIR", tmp_path)
+    monkeypatch.setattr(checklist, "DATA_FILE", tmp_path / "c.json")
+    monkeypatch.setattr(checklist, "DATA_DIR", tmp_path)
+
+    checklist.set_tasks(["a", "b"])
+    assert checklist.tasks() == ["a", "b"]
+    assert checklist.progress() == 0.0
+
+    checklist.toggle("a")
+    assert checklist.is_done("a") is True
+    assert abs(checklist.progress() - 0.5) < 1e-9
+
+    checklist.toggle("a")
+    assert checklist.is_done("a") is False
+    assert checklist.progress() == 0.0
+
+    checklist.set_tasks([])
+    assert checklist.progress() == 0.0
+
+
+def test_focus_session(app):
+    s = focus.FocusSession(focus_min=25, break_min=5)
+    phases = []
+    s.phase_changed.connect(lambda p, d: phases.append((p, d)))
+    assert s.is_running() is False
+    s.start()
+    assert s.is_running() is True
+    assert phases and phases[0][0] == "focus"
+    # force a focus -> break transition
+    s.focus_sec = 1
+    s._remaining = 1
+    s._on_tick()
+    assert phases[-1][0] == "break"
+    s.stop()
+    assert s.is_running() is False
+    assert phases[-1][0] == "idle"

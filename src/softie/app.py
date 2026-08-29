@@ -10,4 +10,4 @@ class BlushApp(QApplication):
     def __init__(self, argv: list[str]):
         super().__init__(argv)
         self.setApplicationName("softie")
-        self.setStyleSheet(theme.PALETTE_QSS)
+        self.setStyleSheet(theme.stylesheet())

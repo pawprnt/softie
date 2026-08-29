@@ -2,12 +2,12 @@
 from __future__ import annotations
 
 from PySide6.QtWidgets import (
-    QCheckBox, QDialog, QDialogButtonBox, QFormLayout, QLabel, QSpinBox,
-    QTextEdit, QVBoxLayout,
+    QCheckBox, QComboBox, QDialog, QDialogButtonBox, QFormLayout, QLabel,
+    QSpinBox, QTextEdit, QVBoxLayout, QWidget,
 )
 
-from softie import theme
 from softie.core import config
+from softie.theme import THEME
 
 
 class SettingsWindow(QDialog):
@@ -16,7 +16,6 @@ class SettingsWindow(QDialog):
         self.engine = engine
         self.setWindowTitle("softie · settings")
         self.setMinimumWidth(360)
-        self.setStyleSheet(theme.PALETTE_QSS)
 
         cfg = engine._cfg
         lay = QVBoxLayout(self)
@@ -38,6 +37,36 @@ class SettingsWindow(QDialog):
             self._rows[name] = (on, mins)
         lay.addLayout(form)
 
+        focus = cfg.get("focus", {})
+        flay = QFormLayout()
+        self.focus_min = QSpinBox()
+        self.focus_min.setRange(1, 180)
+        self.focus_min.setValue(int(focus.get("focus_min", 25)))
+        self.break_min = QSpinBox()
+        self.break_min.setRange(1, 60)
+        self.break_min.setValue(int(focus.get("break_min", 5)))
+        flay.addRow("Focus (min)", self.focus_min)
+        flay.addRow("Break (min)", self.break_min)
+        box = QWidget()
+        box.setLayout(flay)
+        box.setStyleSheet(f"QLabel {{ color: {THEME.C.TEXT_DIM}; }}")
+        lay.addWidget(QLabel("Focus mode"))
+        lay.addWidget(box)
+
+        self.theme_box = QComboBox()
+        self.theme_box.addItems(["dark", "light"])
+        self.theme_box.setCurrentText(str(cfg.get("theme", "dark")))
+        self.sound_on = QCheckBox()
+        self.sound_on.setChecked(bool(cfg.get("sound", {}).get("enabled", True)))
+        alay = QFormLayout()
+        alay.addRow("Theme", self.theme_box)
+        alay.addRow("Chime on reminders", self.sound_on)
+        abox = QWidget()
+        abox.setLayout(alay)
+        abox.setStyleSheet(f"QLabel {{ color: {THEME.C.TEXT_DIM}; }}")
+        lay.addWidget(QLabel("Appearance & audio"))
+        lay.addWidget(abox)
+
         lay.addWidget(QLabel("Custom affirmations (one per line, optional)"))
         self.affirm = QTextEdit()
         self.affirm.setPlainText("\n".join(cfg.get("affirmations") or []))
@@ -54,6 +83,12 @@ class SettingsWindow(QDialog):
         cfg = self.engine._cfg
         for name, (on, mins) in self._rows.items():
             cfg[name] = {"enabled": on.isChecked(), "interval_min": mins.value()}
+        cfg["focus"] = {
+            "focus_min": self.focus_min.value(),
+            "break_min": self.break_min.value(),
+        }
+        cfg["theme"] = self.theme_box.currentText()
+        cfg["sound"] = {"enabled": self.sound_on.isChecked()}
         cfg["affirmations"] = [
             line.strip() for line in self.affirm.toPlainText().splitlines() if line.strip()
         ]

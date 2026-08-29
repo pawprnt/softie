@@ -12,6 +12,10 @@ DEFAULTS: dict = {
     "stretch": {"enabled": True, "interval_min": 45},
     "affirmation": {"enabled": True, "interval_min": 120},
     "affirmations": [],
+    "checklist": ["take meds", "go for a walk", "journal a line"],
+    "focus": {"focus_min": 25, "break_min": 5},
+    "theme": "dark",
+    "sound": {"enabled": True},
 }
 
 

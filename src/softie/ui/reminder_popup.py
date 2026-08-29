@@ -4,8 +4,6 @@ from __future__ import annotations
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton, QVBoxLayout
 
-from softie import theme
-
 
 class ReminderPopup(QDialog):
     def __init__(self, title: str, body: str, parent: QWidget | None = None, timeout: int = 25000):
@@ -13,16 +11,15 @@ class ReminderPopup(QDialog):
         self.setWindowTitle("softie")
         self.setMinimumWidth(320)
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
-        self.setStyleSheet(theme.PALETTE_QSS)
 
         lay = QVBoxLayout(self)
         head = QLabel(title)
-        head.setStyleSheet(f"font-size: 18px; font-weight: 700; color: {theme.C.ACCENT};")
+        head.setObjectName("title")
         lay.addWidget(head)
 
         body_lbl = QLabel(body)
         body_lbl.setWordWrap(True)
-        body_lbl.setStyleSheet(f"font-size: 14px; color: {theme.C.TEXT};")
+        body_lbl.setObjectName("affirm")
         lay.addWidget(body_lbl)
 
         row = QHBoxLayout()
