@@ -7,13 +7,13 @@
 
 buildPythonPackage {
   pname = "softie";
-  version = "0.1.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pawprnt";
     repo = "softie";
-    rev = "v0.1.0";
+    rev = "v1.0.0";
     hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
   };
 

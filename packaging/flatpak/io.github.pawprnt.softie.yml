@@ -21,8 +21,8 @@ modules:
       - install -Dm644 io.github.pawprnt.softie.svg /app/share/icons/hicolor/scalable/apps/io.github.pawprnt.softie.svg
     sources:
       - type: archive
-        url: https://github.com/pawprnt/softie/archive/v0.1.0.tar.gz
-        sha256: SKIP
+        url: https://github.com/pawprnt/softie/archive/v1.0.0.tar.gz
+        sha256: d8e9c4c08d2292c43f123df40f292791a6029fc4f30378dcc10a663ca698b650
       - type: file
         path: io.github.pawprnt.softie.desktop
       - type: file
