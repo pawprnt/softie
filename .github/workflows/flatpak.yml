@@ -1,0 +1,41 @@
+name: Build Flatpak
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/andyholmes/flatter/kde:6.9
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install runtime
+        run: |
+          flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          flatpak install --user --noninteractive -y flathub org.kde.Platform//6.8 org.kde.Sdk//6.8
+
+      - name: Clone flatpak-repo
+        run: |
+          git clone https://x-access-token:${{ secrets.FLATPAK_GITHUB_TOKEN }}@github.com/pawprnt/flatpak-repo.git /tmp/flatpak-repo
+
+      - name: Build
+        run: |
+          flatpak-builder --user --force-clean --disable-rofiles-fuse --repo=/tmp/flatpak-repo/repo _build packaging/flatpak/io.github.pawprnt.softie.yml
+
+      - name: Update repo
+        run: |
+          flatpak build-update-repo --generate-static-deltas --prune /tmp/flatpak-repo/repo
+
+      - name: Push
+        run: |
+          cd /tmp/flatpak-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "update softie" || exit 0
+          git push

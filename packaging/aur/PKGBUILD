@@ -1,0 +1,27 @@
+# Maintainer: foxinwinter <179904685+foxinwinter at users dot noreply dot github dot com>
+
+pkgname=softie
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="A kawaii self-care desktop companion"
+arch=('x86_64')
+url="https://github.com/pawprnt/softie"
+license=('MIT')
+depends=('python' 'pyside6')
+makedepends=('python-build' 'python-installer' 'python-setuptools' 'python-wheel')
+source=("softie-v${pkgver}.tar.gz::https://github.com/pawprnt/softie/archive/v${pkgver}.tar.gz"
+        'softie.desktop')
+sha256sums=('SKIP'
+            'SKIP')
+
+build() {
+  cd "$pkgname-$pkgver"
+  python -m build --wheel --no-isolation
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  python -m installer --destdir="$pkgdir" dist/*.whl
+  install -Dm644 ../softie.desktop "$pkgdir/usr/share/applications/$pkgname.desktop"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

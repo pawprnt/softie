@@ -1,0 +1,16 @@
+name: Push to AUR
+
+on:
+  release:
+    types: [published]
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  aur:
+    uses: pawprnt/.github/.github/workflows/aur-publish.yml@main
+    with:
+      pkgname: softie
+    secrets: inherit

@@ -1,0 +1,31 @@
+app-id: io.github.pawprnt.softie
+runtime: org.kde.Platform
+runtime-version: '6.8'
+sdk: org.kde.Sdk
+command: softie
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --talk-name=org.keyring
+  - --talk-name=org.freedesktop.secrets
+  - --filesystem=home
+modules:
+  - name: softie
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-deps --prefix=/app --no-build-isolation .
+      - install -Dm644 io.github.pawprnt.softie.desktop /app/share/applications/io.github.pawprnt.softie.desktop
+      - install -Dm644 io.github.pawprnt.softie.metainfo.xml /app/share/metainfo/io.github.pawprnt.softie.metainfo.xml
+      - install -Dm644 io.github.pawprnt.softie.svg /app/share/icons/hicolor/scalable/apps/io.github.pawprnt.softie.svg
+    sources:
+      - type: archive
+        url: https://github.com/pawprnt/softie/archive/v0.1.0.tar.gz
+        sha256: SKIP
+      - type: file
+        path: io.github.pawprnt.softie.desktop
+      - type: file
+        path: io.github.pawprnt.softie.metainfo.xml
+      - type: file
+        path: io.github.pawprnt.softie.svg

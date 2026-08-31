@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=softie
+GenericName=Self-Care Companion
+Comment=A kawaii self-care desktop companion
+Exec=softie
+Icon=io.github.pawprnt.softie
+Terminal=false
+Categories=Utility;Qt;
+StartupNotify=true

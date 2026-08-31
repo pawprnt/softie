@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.pawprnt.softie</id>
+  <name>softie</name>
+  <summary>A kawaii self-care desktop companion</summary>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <description>
+    <p>
+      A kawaii self-care desktop companion with water reminders, stretch breaks,
+      affirmations, focus mode, and a pastel tray app.
+    </p>
+  </description>
+  <url type="homepage">https://github.com/pawprnt/softie</url>
+  <provides>
+    <binary>softie</binary>
+  </provides>
+</component>
